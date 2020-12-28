@@ -6,7 +6,8 @@ env:
   - secure: ZkXULu7D0WlqpR9H/Uh4W4vZH38R3tA1lpTgfZTfiN+DdIJFljYI5mxjgYOttrfUTMdJJClRyx2zne1T7P6EhkUCEd/vjxNQszcho21YZ78JmbBOpVtKKWxseav0Yq1TJ3Y0YH2P7dv0HtgTnCC2CKsruy8fuZeK4jhx7m/YZ6lvtDmQ+L4IS59T6ZegcReqksRnV+mzQQVRswVzWekYnc6cB7xR3Sb+PmhdeJB8fWj4TOtwcF3xBw1kcPKmtkpKdDaVqnjLyMaQ60dQxyj114jJBAFJ19A7JM3+rI8WkhNygaMq5Q4KJsa0jNRICGDVAWkeLBOD2z7cUC+sXim7MuI36Wm+Ava0lY0AnjZttR1u2kKcuKUQ9NwaT+dvpH63naPj0OvEDuCVnrY8nxF6indF7urmzWrmz1RwfYVeFQIQsght/wue8ISGqLRX9qZnuopi9antAEGGNWhLLeUHZQMH/kG3JYv+QzRhxQygHyVaLzV6dcqh8+dmlPBjRh3II/HZBbERfxsa+z2oEPXXLC+ovUE4hHRjufzoxo8qAyz8tiU/3zpKViWpgciqe2T72NkAfs7mZ2hw1yGB3EJLla4jRQ/zzCEOWzXry7RrJJLdt4HGkMSthM8dwB1ufJOIEdmJuzAIeYxLfFWtSgXxjiEmsTHM4+i4IGf138LS2q8=
   jobs:
   - GOARCH=amd64 GOOS=linux
-  # - GOARCH=amd64 GOOS=darwin
+  - GOARCH=amd64 GOOS=darwin
+  - GOARCH=arm64 GOOS=linux
 
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
@@ -16,10 +17,6 @@ before_script:
 script:
 - export JOB_GOOS=$(go env GOOS)
 - export JOB_GOARCH=$(go env GOARCH)
-- env
-- echo "consul_members_exporter-$GOOS-$GOARCH"
-- echo "consul_members_exporter-$JOB_GOOS-$JOB_GOARCH"
-- echo "consul_members_exporter-${JOB_GOOS}-${JOB_GOARCH}"
 - go build -o "consul_members_exporter-${JOB_GOOS}-${JOB_GOARCH}"
 - go test -coverprofile c.out ${gobuild_args}
 after_script:
