@@ -9,13 +9,13 @@ env:
   # - GOARCH=amd64 GOOS=darwin
 
 before_script:
-  - export JOB_GOOS=$GOOS
-  - export JOB_GOARCH=$GOARCH
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-    > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - "./cc-test-reporter before-build"
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 script:
+- export JOB_GOOS=$(go env GOOS)
+- export JOB_GOARCH=$(go env GOARCH)
 - env
 - echo "consul_members_exporter-$GOOS-$GOARCH"
 - echo "consul_members_exporter-$JOB_GOOS-$JOB_GOARCH"
