@@ -9,12 +9,14 @@ env:
   - GOARCH=amd64 GOOS=darwin
 
 before_script:
+  - export JOB_GOOS=${GOOS}
+  - export JOB_GOARCH=${GOARCH}
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
     > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - "./cc-test-reporter before-build"
 script:
-- go build -o "consul_members_exporter-${GOOS}-${GOARCH}"
+- go build -o "consul_members_exporter-${JOB_GOOS}-${JOB_GOARCH}"
 - go test -coverprofile c.out ${gobuild_args}
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -p $(go list -m)"
