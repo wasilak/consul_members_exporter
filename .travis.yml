@@ -4,6 +4,8 @@ go:
 env:
   global:
   - secure: ZkXULu7D0WlqpR9H/Uh4W4vZH38R3tA1lpTgfZTfiN+DdIJFljYI5mxjgYOttrfUTMdJJClRyx2zne1T7P6EhkUCEd/vjxNQszcho21YZ78JmbBOpVtKKWxseav0Yq1TJ3Y0YH2P7dv0HtgTnCC2CKsruy8fuZeK4jhx7m/YZ6lvtDmQ+L4IS59T6ZegcReqksRnV+mzQQVRswVzWekYnc6cB7xR3Sb+PmhdeJB8fWj4TOtwcF3xBw1kcPKmtkpKdDaVqnjLyMaQ60dQxyj114jJBAFJ19A7JM3+rI8WkhNygaMq5Q4KJsa0jNRICGDVAWkeLBOD2z7cUC+sXim7MuI36Wm+Ava0lY0AnjZttR1u2kKcuKUQ9NwaT+dvpH63naPj0OvEDuCVnrY8nxF6indF7urmzWrmz1RwfYVeFQIQsght/wue8ISGqLRX9qZnuopi9antAEGGNWhLLeUHZQMH/kG3JYv+QzRhxQygHyVaLzV6dcqh8+dmlPBjRh3II/HZBbERfxsa+z2oEPXXLC+ovUE4hHRjufzoxo8qAyz8tiU/3zpKViWpgciqe2T72NkAfs7mZ2hw1yGB3EJLla4jRQ/zzCEOWzXry7RrJJLdt4HGkMSthM8dwB1ufJOIEdmJuzAIeYxLfFWtSgXxjiEmsTHM4+i4IGf138LS2q8=
+
+  # build matrix doesn not play well with github releases deployment
   # jobs:
   # - GOARCH=amd64 GOOS=linux
   # - GOARCH=amd64 GOOS=darwin
@@ -17,7 +19,11 @@ script:
 # - export JOB_GOOS=$(go env GOOS)
 # - export JOB_GOARCH=$(go env GOARCH)
 # - go build -o "consul_members_exporter-${JOB_GOOS}-${JOB_GOARCH}"
+
 - go test -coverprofile c.out ${gobuild_args}
+
+# instead of parallel execution of jobs (each producing an exectuable), 
+# running single one producing all files, in order to prevent racing conditions and work with github releases
 - GOARCH=amd64 GOOS=linux go build -o "consul_members_exporter-linux-amd64"
 - GOARCH=amd64 GOOS=darwin go build -o "consul_members_exporter-darwin-amd64"
 - GOARCH=arm64 GOOS=linux go build -o "consul_members_exporter-linux-arm64"
@@ -25,7 +31,6 @@ after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -p $(go list -m)"
 deploy:
   before_deploy:
-    - ls -lha
     # - export JOB_GOOS=$(go env GOOS)
     # - export JOB_GOARCH=$(go env GOARCH)
   provider: releases
