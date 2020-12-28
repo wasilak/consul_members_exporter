@@ -21,14 +21,13 @@ script:
 - go test -coverprofile c.out ${gobuild_args}
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -p $(go list -m)"
-- ls -lha .
 deploy:
   provider: releases
   api_key:
     secure: d+H8h1O36KqlJ4T30P/Ozvbj1NhIpvof0gWfpej1kxDOVr6ouCcTs3hPIsiCrNHwQ21yqqQPBc8BnQiUKlsWQ0LdnAi+gpBfPQNA5hHv1fYs93CBR85/SzCU/ECVF74uG/bXGJR02zo+orLfVmQ2WbIWeh/kPetB1Nak8z11HW/efLd4jsB6rGHen8O/J2/IjbmltSAC8BD0sMB5qvlIKfvNBvmoBnx1FcvUou1d5gKKC+4up4MMrsR3m4fnUpfyv8QBQNjAagsUkrhbK5CAPgot9tgzIGgtmyoOoYxwFGSQu6OGgzg05crVuQJGben2oL5SBld9w0JPGd4pQLOgZnmaDZwuR5roqmU8Om0YJJ+pqq93p8aeOrNxnM+B1Jw96jv/ahwN1dskglK8yhXIcwUrVl6p24hbhAJ6lYZaSuRqX824h+ZWH3fk29xrlwx3ONzCFU9gmRfQpA1zDWXk5lprmaC5F2PiqmWZeCfd9uii/aRNRJSmJKmxSC7qrDJCHI5x2LvEQ00TbP4gOSnSw6seF7Rx5nIhL2EerLS/Ds9MVnQlXjN5DJGuM8bMY+1H+TEk8LEbkYhUiX/JLvynMNQM689mtylkGBvQxofmnfqzqbsO2KvvV+KVX9oiCX87Ec0NUiGcXZKvdVITSq3oQ0T848YmHlkCOmdrWUlb3fc=
   file_glob: true
   file: consul_members_exporter-*
-  skip_cleanup: true
+  skip_cleanup: false
   overwrite: true
   on:
     tags: true
