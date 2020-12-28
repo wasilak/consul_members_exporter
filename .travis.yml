@@ -17,6 +17,7 @@ script:
 - go test -coverprofile c.out ${gobuild_args}
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -p $(go list -m)"
+- ls -lha .
 deploy:
   provider: releases
   api_key:
