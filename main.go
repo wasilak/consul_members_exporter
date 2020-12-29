@@ -17,7 +17,7 @@ const namespace = "consul_members"
 
 var (
 	listenAddress = flag.String("listen-address", ":9142", "Address to listen on for telemetry")
-	metricsPath = flag.String("telemetry-path", "/metrics", "Path under which to expose metrics")
+	metricsPath   = flag.String("telemetry-path", "/metrics", "Path under which to expose metrics")
 
 	membersGauge = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "details"),
@@ -97,7 +97,6 @@ func rootHandler() http.Handler {
 			</html>`))
 	})
 }
-
 
 func main() {
 	flag.Parse()
