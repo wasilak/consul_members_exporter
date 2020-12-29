@@ -1,4 +1,4 @@
-# consul_members_exporter [![Build Status](https://travis-ci.com/wasilak/consul_members_exporter.svg?branch=main)](https://travis-ci.com/wasilak/consul_members_exporter)
+# consul_members_exporter [![Build Status](https://travis-ci.com/wasilak/consul_members_exporter.svg?branch=main)](https://travis-ci.com/wasilak/consul_members_exporter) [![Maintainability](https://api.codeclimate.com/v1/badges/de65d3d71ee04587d568/maintainability)](https://codeclimate.com/github/wasilak/consul_members_exporter/maintainability)
 Prometheus exporter providing details about known members
 
 This is meant to be supplementary exporter for Consul providing information about known memebers.
@@ -11,8 +11,8 @@ Provided metrics:
   
 Usage:
 ```
--web.listen-address string
+-listen-address string
     	Address to listen on for telemetry (default ":9142")
--web.telemetry-path string
+-telemetry-path string
     	Path under which to expose metrics (default "/metrics")
 ```
