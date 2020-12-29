@@ -1,0 +1,19 @@
+[Unit]
+Description=consul members exporter for Prometheus
+Requires=network-online.target
+
+Wants=consul.service
+After=consul.service
+
+[Service]
+User=consul_members_exporter
+Group=consul_members_exporter
+PIDFile=/run/consul_members_exporter.pid
+Restart=on-failure
+
+ExecStart=/usr/bin/consul_members_exporter
+
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
