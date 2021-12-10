@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"fmt"
+	"os"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/prometheus/client_golang/prometheus"
@@ -14,10 +16,12 @@ import (
 )
 
 const namespace = "consul_members"
+const version = "0.0.3"
 
 var (
 	listenAddress = flag.String("listen-address", ":9142", "Address to listen on for telemetry")
 	metricsPath   = flag.String("telemetry-path", "/metrics", "Path under which to expose metrics")
+	showVersion   = flag.Bool("version", false, "version display")
 
 	membersGauge = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "details"),
@@ -100,6 +104,11 @@ func rootHandler() http.Handler {
 
 func main() {
 	flag.Parse()
+
+	if *showVersion {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	// Get a new client
 	client, err := api.NewClient(api.DefaultConfig())
