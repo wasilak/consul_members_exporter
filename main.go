@@ -2,13 +2,14 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
-	"fmt"
-	"os"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/prometheus/client_golang/prometheus"
@@ -16,12 +17,9 @@ import (
 )
 
 const namespace = "consul_members"
-const version = "0.0.3"
 
 var (
-	listenAddress = flag.String("listen-address", ":9142", "Address to listen on for telemetry")
-	metricsPath   = flag.String("telemetry-path", "/metrics", "Path under which to expose metrics")
-	showVersion   = flag.Bool("version", false, "version display")
+	version string
 
 	membersGauge = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "details"),
@@ -47,6 +45,12 @@ type MiddlewareHandler func(http.Handler) http.Handler
 // Exporter struct
 type Exporter struct {
 	Agent *api.Agent
+}
+
+func versionFunc() error {
+	buildInfo, _ := debug.ReadBuildInfo()
+	fmt.Printf("consul_members_exporter\nVersion %s (GO %s)\n", version, buildInfo.GoVersion)
+	return nil
 }
 
 // NewExporter func
@@ -90,23 +94,27 @@ func logWrapper(h http.Handler) http.Handler {
 	})
 }
 
-func rootHandler() http.Handler {
+func rootHandler(metricsPath string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
 			<head><title>Consul Members Exporter</title></head>
 			<body>
 			<h1>Consul Members Exporter</h1>
-			<p><a href='` + *metricsPath + `'>Metrics</a></p>
+			<p><a href='` + metricsPath + `'>Metrics</a></p>
 			</body>
 			</html>`))
 	})
 }
 
 func main() {
+	listenAddress := flag.String("listen-address", ":9142", "Address to listen on for telemetry")
+	metricsPath := flag.String("telemetry-path", "/metrics", "Path under which to expose metrics")
+	showVersion := flag.Bool("version", false, "version display")
+
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Println(version)
+		versionFunc()
 		os.Exit(0)
 	}
 
@@ -121,7 +129,7 @@ func main() {
 	exporter := NewExporter(agent)
 	prometheus.MustRegister(exporter)
 
-	http.Handle("/", logWrapper(rootHandler()))
+	http.Handle("/", logWrapper(rootHandler(*metricsPath)))
 	http.Handle(*metricsPath, logWrapper(promhttp.Handler()))
 
 	log.Printf("Consul Members Exporter started :: listening on %s\n", *listenAddress)
