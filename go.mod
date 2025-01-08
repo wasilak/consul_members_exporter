@@ -34,4 +34,4 @@ require (
 	google.golang.org/protobuf v1.34.2 // indirect
 )
 
-replace github.com/armon/go-metrics => github.com/hashicorp/go-metrics v0.5.3
+replace github.com/armon/go-metrics => github.com/hashicorp/go-metrics v0.5.4
