@@ -3,7 +3,7 @@ module github.com/wasilak/consul_members_exporter
 go 1.23
 
 require (
-	github.com/hashicorp/consul/api v1.31.2
+	github.com/hashicorp/consul/api v1.32.0
 	github.com/prometheus/client_golang v1.21.1
 )
 
