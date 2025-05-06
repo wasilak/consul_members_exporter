@@ -2,7 +2,7 @@ module github.com/wasilak/consul_members_exporter
 
 go 1.23.8
 
-toolchain go1.24.2
+toolchain go1.24.3
 
 require (
 	github.com/hashicorp/consul/api v1.32.1
